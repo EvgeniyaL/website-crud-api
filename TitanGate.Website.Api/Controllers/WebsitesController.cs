@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TitanGate.Website.Api.Contracts.Request;
@@ -7,8 +8,8 @@ using TitanGate.Website.Api.Handlers.Contracts;
 
 namespace TitanGate.Website.Api.Controllers
 {
-    // [Authorize]
-    [Route("api/websites")]
+    [Authorize]
+    [Route("api/[controller]")]
     [ApiController]
     public class WebsitesController : ControllerBase
     {
@@ -29,28 +30,7 @@ namespace TitanGate.Website.Api.Controllers
         }
 
         [HttpGet]
-        [Route("all")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllWebsites()
-        {
-            var result = await _websiteGetHandler.HandleGetAllRequest();
-            return Ok(result);
-        }
-
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetWebsiteById([FromQuery] int id)
-        {
-            var result = await _websiteGetHandler.HandleGetRequest(id);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.Fail);
-            }
-
-            return Ok(result.Success);
-        }
+        public Task<IActionResult> Get(int id) => id == 0 ? GetAllWebsites() : GetWebsiteById(id);
 
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -99,6 +79,27 @@ namespace TitanGate.Website.Api.Controllers
             var result = await _paginationWebsiteHandler.HandleRequest(command);
 
             return Ok(result);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        private async Task<IActionResult> GetAllWebsites()
+        {
+            var result = await _websiteGetHandler.HandleGetAllRequest();
+            return Ok(result.Success);
+        }
+
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        private async Task<IActionResult> GetWebsiteById([FromQuery] int id)
+        {
+            var result = await _websiteGetHandler.HandleGetRequest(id);
+
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Fail);
+            }
+
+            return Ok(result.Success);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿namespace TitanGate.Website.Api.Handlers.Mappers
 {
-    public interface IResponseMapper<Entity, Response>
+    public interface IResponseMapper<TSource, TDestination>
     {
-        Response EntityToResponse(Entity entity, string image);
+        TDestination EntityToResponse(TSource entity, string image);
     }
 }

@@ -7,7 +7,7 @@ namespace TitanGate.Website.Api.Handlers.Contracts
 {
     public interface IWebsiteCreateOrUpdateHandler
     {
-        Task<Result<int, ErrorResponse>> HandleCreateRequest(WebsiteRequest request);
+        Task HandleCreateRequest(WebsiteRequest request);
 
         Task<Result<int, ErrorResponse>> HandleUpdateRequest(int websiteId, WebsiteRequest request);
     }

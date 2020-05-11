@@ -4,7 +4,7 @@ using TitanGate.Website.Api.Repository.Configurations;
 
 namespace TitanGate.Website.Api.Repository
 {
-    using Website = Domain.Entities.Website; 
+    using Website = Domain.Entities.Website;
 
     public class RepositoriesContext : DbContext
     {
@@ -12,6 +12,7 @@ namespace TitanGate.Website.Api.Repository
         {
         }
 
+        public DbSet<Client> Clients { get; set; }
         public DbSet<Website> Websites { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Login> Logins { get; set; }
@@ -22,7 +23,8 @@ namespace TitanGate.Website.Api.Repository
             modelBuilder
                 .ApplyConfiguration(new LoginConfiguration())
                 .ApplyConfiguration(new CategoryConfiguration())
-                .ApplyConfiguration(new WebsiteConfiguration());
+                .ApplyConfiguration(new WebsiteConfiguration())
+                .ApplyConfiguration(new ClientConfiguration());
         }
     }
 }
