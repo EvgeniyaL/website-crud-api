@@ -8,6 +8,7 @@ namespace Microsoft.Extensions.DependencyInjection
         public static void AddReposiotories(this IServiceCollection services)
         {
             services.AddScoped<IWebsiteRepositoty, WebsiteRepositoty>();
+            services.AddScoped<IClientRespository, ClientRepository>();
         }
     }
 }

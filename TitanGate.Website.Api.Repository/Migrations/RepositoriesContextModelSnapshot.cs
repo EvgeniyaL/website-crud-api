@@ -92,6 +92,30 @@ namespace TitanGate.Website.Api.Repository.Migrations
                         });
                 });
 
+            modelBuilder.Entity("TitanGate.Website.Api.Domain.Entities.Client", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<string>("ClientSecret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(250)")
+                        .HasMaxLength(250);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("Clients");
+                });
+
             modelBuilder.Entity("TitanGate.Website.Api.Domain.Entities.Login", b =>
                 {
                     b.Property<int>("Id")
@@ -101,8 +125,8 @@ namespace TitanGate.Website.Api.Repository.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(100)")
-                        .HasMaxLength(100);
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
 
                     b.Property<int>("LoginOfWebsiteId")
                         .HasColumnType("int");

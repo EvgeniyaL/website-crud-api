@@ -20,6 +20,20 @@ namespace TitanGate.Website.Api.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Clients",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ClientId = table.Column<string>(maxLength: 50, nullable: false),
+                    ClientSecret = table.Column<string>(maxLength: 250, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Clients", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Websites",
                 columns: table => new
                 {
@@ -48,7 +62,7 @@ namespace TitanGate.Website.Api.Repository.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Email = table.Column<string>(maxLength: 100, nullable: false),
+                    Email = table.Column<string>(maxLength: 50, nullable: false),
                     Password = table.Column<string>(maxLength: 250, nullable: false),
                     LoginOfWebsiteId = table.Column<int>(nullable: false)
                 },
@@ -82,6 +96,11 @@ namespace TitanGate.Website.Api.Repository.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_Clients_ClientId",
+                table: "Clients",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Logins_LoginOfWebsiteId",
                 table: "Logins",
                 column: "LoginOfWebsiteId",
@@ -95,6 +114,9 @@ namespace TitanGate.Website.Api.Repository.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Clients");
+
             migrationBuilder.DropTable(
                 name: "Logins");
 

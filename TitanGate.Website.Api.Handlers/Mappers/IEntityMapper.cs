@@ -1,7 +1,7 @@
 ﻿namespace TitanGate.Website.Api.Handlers.Mappers
 {
-    public interface IEntityMapper<Request,Entity>
+    public interface IEntityMapper<TSource, TDestination>
     {
-        Entity RequestToEntity(Request request, string filePath, string password);
+        TDestination RequestToEntity(TSource request, string filePath, string password);
     }
 }

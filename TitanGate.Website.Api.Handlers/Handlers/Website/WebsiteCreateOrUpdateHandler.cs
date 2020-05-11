@@ -29,12 +29,10 @@ namespace TitanGate.Website.Api.Handlers
         }
 
 
-        public async Task<Result<int, ErrorResponse>> HandleCreateRequest(WebsiteRequest request)
+        public async Task HandleCreateRequest(WebsiteRequest request)
         {
             var entity = await GetEntity(request);
             await _websiteRepositoty.Create(entity);
-
-            return new Result<int, ErrorResponse> { IsSuccess = true };
         }
 
         public async Task<Result<int, ErrorResponse>> HandleUpdateRequest(int websiteId, WebsiteRequest request)
