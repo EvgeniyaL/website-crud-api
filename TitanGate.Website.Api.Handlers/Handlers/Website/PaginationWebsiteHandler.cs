@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TitanGate.Website.Api.Contracts;
@@ -35,19 +34,21 @@ namespace TitanGate.Website.Api.Handlers
             var paginationEntityResult = await _websiteRepositoty.GetPaginationWebsites(request.PageNumber, request.PageSize);
             var responseRecords = await GetResponseRecords(paginationEntityResult);
 
-            SortResponseRecords(responseRecords, request.SortOrder, request.OrderByProperty);
+            var sortedResponse = SortResponseRecords(responseRecords, request.SortOrder, request.OrderByProperty);
 
-            return GetResponse(paginationEntityResult, responseRecords);
+            return GetResponse(paginationEntityResult, sortedResponse);
         }
 
-        private void SortResponseRecords(List<WebsiteResponse> responseRecords, SortOrder sortOrder, SortOrderByProperty orderByProperty)
+        private IEnumerable<WebsiteResponse> SortResponseRecords(List<WebsiteResponse> responseRecords, SortOrder sortOrder, SortOrderByProperty orderByProperty)
         {
+            var orderByPropertyInfo = typeof(WebsiteResponse).GetProperty(orderByProperty.ToString());
+
             if (sortOrder == SortOrder.Ascending)
             {
-                responseRecords.OrderBy(x => x.GetType().GetProperty(orderByProperty.ToString()).Name);
+                return responseRecords.OrderBy(x => orderByPropertyInfo.GetValue(x));
             }
 
-            responseRecords.OrderByDescending(x => x.GetType().GetProperty(orderByProperty.ToString()).Name);
+           return responseRecords.OrderByDescending(x => orderByPropertyInfo.GetValue(x));
         }
 
         private async Task<List<WebsiteResponse>> GetResponseRecords(PaginationWebsitesDto paginationEntityResult)
@@ -64,7 +65,7 @@ namespace TitanGate.Website.Api.Handlers
             return responseRecords;
         }
         private static Result<PaginationWebsiteResponse, ErrorResponse> GetResponse(PaginationWebsitesDto paginationEntityResult,
-                                                                            List<WebsiteResponse> responseRecords)
+                                                                                    IEnumerable<WebsiteResponse> responseRecords)
         {
             return new Result<PaginationWebsiteResponse, ErrorResponse>
             {

@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
 using TitanGate.Website.Api.Domain.Settings;
 
 namespace TitanGate.Website.Api.Filters
@@ -27,11 +26,13 @@ namespace TitanGate.Website.Api.Filters
                 .Where(a => IPAddress.Parse(a)
                 .Equals(remoteIp))
                 .Any();
+
             if (!isInwhiteListIPList)
             {
                 context.Result = new StatusCodeResult(StatusCodes.Status403Forbidden); 
                 return;
             }
+
             base.OnActionExecuting(context);
         }
     }

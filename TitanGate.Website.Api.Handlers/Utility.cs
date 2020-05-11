@@ -1,5 +1,4 @@
-﻿using System;
-using TitanGate.Website.Api.Contracts;
+﻿using TitanGate.Website.Api.Contracts;
 using TitanGate.Website.Api.Contracts.Response;
 
 namespace TitanGate.Website.Api.Handlers
@@ -13,7 +12,7 @@ namespace TitanGate.Website.Api.Handlers
                 IsSuccess = false,
                 Fail = new ErrorResponse
                 {
-                    ErroMessage = "The resource is not found in the records."
+                    ErrorMessage = "The resource is not found in the records."
                 }
             };
         }
@@ -25,7 +24,7 @@ namespace TitanGate.Website.Api.Handlers
                 IsSuccess = false,
                 Fail = new ErrorResponse
                 {
-                    ErroMessage = "The resource is not found in the records."
+                    ErrorMessage = "The resource is not found in the records."
                 }
             };
         }

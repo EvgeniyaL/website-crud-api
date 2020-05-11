@@ -22,19 +22,19 @@ namespace TitanGate.Website.Api.Controllers
         private readonly IClientCreateHandler _createHandler;
         private readonly IClientLoginHandler _loginHandler;
 
-        public ClientsController(IOptions<ClientApiSettings> settings, 
-                                IClientCreateHandler createHandler, 
+        public ClientsController(IOptions<ClientApiSettings> settings,
+                                IClientCreateHandler createHandler,
                                 IClientLoginHandler loginHandler)
         {
             _settings = settings.Value;
             _createHandler = createHandler;
             _loginHandler = loginHandler;
         }
-        
+
         [HttpPost]
         [AllowAnonymous]
         [Route("token")]
-        public async Task<IActionResult> Login([FromBody]ClientRequest login)
+        public async Task<IActionResult> Login([FromBody] ClientRequest login)
         {
             var isAuthenticated = await _loginHandler.HandleLoginRequest(login);
 
@@ -51,7 +51,7 @@ namespace TitanGate.Website.Api.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ServiceFilter(typeof(IPFilterAccess))]
-        public async Task<IActionResult> CreateClient([FromBody]ClientRequest command)
+        public async Task<IActionResult> CreateClient([FromBody] ClientRequest command)
         {
             await _createHandler.HandleCreateRequest(command);
             return Ok();
