@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>TitanGate.Website.Api.Handlers</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TitanGate.Website.Api.Contracts\TitanGate.Website.Api.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>
