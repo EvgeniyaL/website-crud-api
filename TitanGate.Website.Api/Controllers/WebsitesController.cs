@@ -47,11 +47,11 @@ namespace TitanGate.Website.Api.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UpdateWebsite([FromQuery] int id, [FromBody] WebsiteRequest command)
         {
-            var result =  await _websiteHandler.HandleUpdateRequest(id,command);
+            var result =  await _websiteHandler.HandleUpdateRequest(id, command);
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Fail);
+                return NotFound(result.Fail);
             }
 
             return Ok();
@@ -66,7 +66,7 @@ namespace TitanGate.Website.Api.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Fail);
+                return NotFound(result.Fail);
             }
 
             return Ok();
@@ -78,7 +78,7 @@ namespace TitanGate.Website.Api.Controllers
         {
             var result = await _paginationWebsiteHandler.HandleRequest(command);
 
-            return Ok(result);
+            return Ok(result.Success);
         }
 
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -96,7 +96,7 @@ namespace TitanGate.Website.Api.Controllers
 
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Fail);
+                return NotFound(result.Fail);
             }
 
             return Ok(result.Success);

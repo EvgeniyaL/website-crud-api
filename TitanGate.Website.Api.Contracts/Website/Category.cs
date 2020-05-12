@@ -13,7 +13,13 @@ namespace TitanGate.Website.Api.Contracts
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (string.IsNullOrWhiteSpace(Name))
+            {
                 yield return Validation.GetIsMissingResult(nameof(Name));
+            }
+            if (Name?.Length > 50)
+            {
+                yield return Validation.GetDataIsTooLongResult(nameof(Name), 50);
+            }
         }
     }
 }

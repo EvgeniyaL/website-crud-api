@@ -40,6 +40,7 @@ namespace TitanGate.Website.Api
                             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JwtKey"]))
                         };
                     });
+
             services.AddScoped<IPFilterAccess>();
 
             services.AddControllers()

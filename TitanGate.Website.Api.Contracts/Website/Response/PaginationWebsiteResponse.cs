@@ -6,8 +6,6 @@ namespace TitanGate.Website.Api.Contracts.Response
     {
         public int PageNumber { get; set; }
 
-        public int PageSize { get; set; }
-
         public int TotalRecordCount { get; set; }
 
         public int TotalPagesCount { get; set; }

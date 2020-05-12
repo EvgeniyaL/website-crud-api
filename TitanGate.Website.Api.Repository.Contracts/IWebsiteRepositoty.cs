@@ -17,6 +17,6 @@ namespace TitanGate.Website.Api.Repository.Contracts
 
         Task SoftDelete(Website entity);
 
-        Task<PaginationWebsitesDto> GetPaginationWebsites(int pageNumber, int pageSize);
+        Task<PaginationWebsitesDto> GetPaginationWebsites(PaginationWebsiteRequestDto requestDto);
     }
 }

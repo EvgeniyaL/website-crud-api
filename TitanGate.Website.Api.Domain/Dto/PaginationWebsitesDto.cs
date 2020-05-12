@@ -4,11 +4,9 @@ namespace TitanGate.Website.Api.Domain.Dto
 {
     using Website = Entities.Website;
 
-     public class PaginationWebsitesDto
+    public class PaginationWebsitesDto
     {
         public int PageNumber { get; set; }
-
-        public int PageSize { get; set; }
 
         public int TotalRecordCount { get; set; }
 

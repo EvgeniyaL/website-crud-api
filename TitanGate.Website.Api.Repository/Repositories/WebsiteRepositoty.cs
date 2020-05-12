@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
+using TitanGate.Website.Api.Domain;
 using TitanGate.Website.Api.Domain.Dto;
 using TitanGate.Website.Api.Repository.Contracts;
 
@@ -20,7 +22,7 @@ namespace TitanGate.Website.Api.Repository.Repositories
         public async Task<IEnumerable<Website>> GetAll()
             => await _context.Websites.Include(x => x.Login)
                                       .Include(x => x.Category)
-                                      .Where(x=>x.IsDeleted==false)
+                                      .Where(x => x.IsDeleted == false)
                                       .ToListAsync();
         public async Task<Website> GetById(int id)
             => await _context.Websites.Include(x => x.Login)
@@ -48,20 +50,84 @@ namespace TitanGate.Website.Api.Repository.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task<PaginationWebsitesDto> GetPaginationWebsites(int pageNumber, int pageSize)
+        public async Task<PaginationWebsitesDto> GetPaginationWebsites(PaginationWebsiteRequestDto request)
         {
-            var result = new PaginationWebsitesDto();
-            result.PageNumber = pageNumber;
-            result.PageSize = pageSize;
-            result.TotalRecordCount = _context.Websites.Where(x => x.IsDeleted == false).Count();
-            result.TotalPagesCount = (int)Math.Ceiling((double)result.TotalPagesCount / result.PageSize);
+            var result = GetResultPageAndCountProperties(request);
 
-            var skip = (pageNumber - 1) * pageSize;
-            result.Records = await _context.Websites.Include(x => x.Login)
+            var skip = (result.PageNumber - 1) * request.PageSize;
+
+            var query = _context.Websites.Include(x => x.Login)
                                                     .Include(x => x.Category)
                                                     .Where(x => x.IsDeleted == false)
                                                     .Skip(skip)
-                                                    .Take(pageSize).ToListAsync();
+                                                    .Take(request.PageSize);
+
+            query = ApplySorting(request, query);
+
+            result.Records = await query.ToListAsync();
+
+            return result;
+        }
+
+        private static IQueryable<Website> ApplySorting(PaginationWebsiteRequestDto request, IQueryable<Website> query)
+        {
+            var sortExpression = GetSortExpression(request);
+
+            if (request.SortOrder == SortOrder.Ascending)
+            {
+                query = query.OrderBy(sortExpression);
+            }
+            else
+            {
+                query = query.OrderByDescending(sortExpression);
+            }
+
+            return query;
+        }
+
+        private PaginationWebsitesDto GetResultPageAndCountProperties(PaginationWebsiteRequestDto request)
+        {
+            var result = new PaginationWebsitesDto();
+            result.TotalRecordCount = _context.Websites.Where(x => x.IsDeleted == false).Count();
+            result.PageNumber = GetPageNumber(request.PageNumber, request.PageSize, result.TotalRecordCount);
+            result.TotalPagesCount = (int)Math.Ceiling((double)result.TotalRecordCount / request.PageSize);
+
+            return result;
+        }
+
+        private static Expression<Func<Website, string>> GetSortExpression(PaginationWebsiteRequestDto request)
+        {
+            Expression<Func<Website, string>> keySelector = null;
+
+            if (request.OrderByProperty == SortOrderByProperty.Name)
+            {
+                keySelector = x => x.Name;
+            }
+            if (request.OrderByProperty == SortOrderByProperty.Category)
+            {
+                keySelector = x => x.Category.Name;
+            }
+            if (request.OrderByProperty == SortOrderByProperty.Email)
+            {
+                keySelector = x => x.Login.Email;
+            }
+
+            return keySelector;
+        }
+
+        private int GetPageNumber(int pageNumber, int pageSize, int totalRecordCount)
+        {
+            var result = pageNumber;
+            if ((totalRecordCount / pageSize) > 0 &&
+                (totalRecordCount % pageSize) > 0 &&
+                (totalRecordCount / pageSize) + 1 < pageNumber)
+            {
+                result = (totalRecordCount / pageSize) + 1;
+            }
+            else if ((totalRecordCount / pageSize) == 0)
+            {
+                result = 1;
+            }
 
             return result;
         }

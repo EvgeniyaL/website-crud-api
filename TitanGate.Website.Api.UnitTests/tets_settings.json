@@ -7,7 +7,7 @@
     }
   },
   "AllowedHosts": "*",
-  "Whitelist": [ "127.0.0.1", "::1" ],
+  "Whitelist": [ "172.0.0.1", "::1" ],
 
   "ConnectionStrings": {
     "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=TitanGateWebsiteApi;Integrated Security=True"
@@ -17,7 +17,7 @@
   "JwtIssuer": "https://localhost:5001/",
   "JwtExpirationInMinutes": 5,
 
-  "Directory": "C:\\TitanGate\\Website\\",
+  "Directory": "C:\\TitanGate\\Tests\\",
   "ImagesSubFolder": "HomepageSnapshots",
   "ImageExtention": ".png"
 }

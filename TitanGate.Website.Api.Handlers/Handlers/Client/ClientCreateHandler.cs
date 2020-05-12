@@ -27,6 +27,7 @@ namespace TitanGate.Website.Api.Handlers.Handlers
         {
             var clientSecret = _passwordHashService.HashWithSaltPassword(request.ClientSecret);
             var entity = _mapper.RequestToEntity(request, clientSecret);
+
             await _clientRespository.Create(entity);
         }
     }
