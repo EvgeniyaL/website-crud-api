@@ -4,4 +4,8 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TitanGate.Website.Api.Domain\TitanGate.Website.Api.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

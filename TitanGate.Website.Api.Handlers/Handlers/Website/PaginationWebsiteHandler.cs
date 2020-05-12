@@ -31,24 +31,22 @@ namespace TitanGate.Website.Api.Handlers
 
         public async Task<Result<PaginationWebsiteResponse, ErrorResponse>> HandleRequest(PaginationWebsiteRequest request)
         {
-            var paginationEntityResult = await _websiteRepositoty.GetPaginationWebsites(request.PageNumber, request.PageSize);
-            var responseRecords = await GetResponseRecords(paginationEntityResult);
-
-            var sortedResponse = SortResponseRecords(responseRecords, request.SortOrder, request.OrderByProperty);
+            var requestDto = MapRequest(request);
+            var paginationEntityResult = await _websiteRepositoty.GetPaginationWebsites(requestDto);
+            var sortedResponse = await GetResponseRecords(paginationEntityResult);
 
             return GetResponse(paginationEntityResult, sortedResponse);
         }
 
-        private IEnumerable<WebsiteResponse> SortResponseRecords(List<WebsiteResponse> responseRecords, SortOrder sortOrder, SortOrderByProperty orderByProperty)
+        private PaginationWebsiteRequestDto MapRequest(PaginationWebsiteRequest request)
         {
-            var orderByPropertyInfo = typeof(WebsiteResponse).GetProperty(orderByProperty.ToString());
-
-            if (sortOrder == SortOrder.Ascending)
+            return new PaginationWebsiteRequestDto
             {
-                return responseRecords.OrderBy(x => orderByPropertyInfo.GetValue(x));
-            }
-
-           return responseRecords.OrderByDescending(x => orderByPropertyInfo.GetValue(x));
+                PageNumber = request.PageNumber,
+                PageSize = request.PageSize,
+                SortOrder = request.SortOrder,
+                OrderByProperty = request.OrderByProperty
+            };
         }
 
         private async Task<List<WebsiteResponse>> GetResponseRecords(PaginationWebsitesDto paginationEntityResult)
@@ -64,6 +62,7 @@ namespace TitanGate.Website.Api.Handlers
 
             return responseRecords;
         }
+
         private static Result<PaginationWebsiteResponse, ErrorResponse> GetResponse(PaginationWebsitesDto paginationEntityResult,
                                                                                     IEnumerable<WebsiteResponse> responseRecords)
         {
@@ -72,7 +71,6 @@ namespace TitanGate.Website.Api.Handlers
                 Success = new PaginationWebsiteResponse
                 {
                     PageNumber = paginationEntityResult.PageNumber,
-                    PageSize = paginationEntityResult.PageSize,
                     TotalPagesCount = paginationEntityResult.TotalPagesCount,
                     TotalRecordCount = paginationEntityResult.TotalRecordCount,
                     Records = responseRecords

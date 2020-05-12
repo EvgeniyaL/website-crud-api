@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using TitanGate.Website.Api.Contracts.ValidationUtility;
+using TitanGate.Website.Api.Domain;
 
 namespace TitanGate.Website.Api.Contracts.Request
 {
@@ -17,9 +18,13 @@ namespace TitanGate.Website.Api.Contracts.Request
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
             if (PageNumber <= 0)
+            {
                 yield return Validation.GetGreaterThanZeroResult(nameof(PageNumber));
+            }
             if (PageSize <= 0)
+            {
                 yield return Validation.GetGreaterThanZeroResult(nameof(PageSize));
+            }
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace TitanGate.Website.Api.Contracts
+﻿namespace TitanGate.Website.Api.Domain
 {
     public enum SortOrder
     {

@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using TitanGate.Website.Api.Handlers.Services;
+﻿using TitanGate.Website.Api.Handlers.Services;
 using TitanGate.Website.Api.Handlers.ServicesContracts;
 using Xunit;
 
@@ -18,7 +17,7 @@ namespace TitanGate.Website.Api.UnitTests
         }
 
         [Fact]
-        public async Task HashWithSaltPassword_ShouldReturnSaltWithHashString()
+        public void HashWithSaltPassword_ShouldReturnSaltWithHashString()
         {
             var saltAndHash = _passwordHashService.HashWithSaltPassword(Password);
             var splited = saltAndHash.Split(Delimiter);
@@ -26,7 +25,7 @@ namespace TitanGate.Website.Api.UnitTests
         }
 
         [Fact]
-        public async Task VerifyPassword_ShouldReturnTrue_WhenPasswordsAreMaching()
+        public void VerifyPassword_ShouldReturnTrue_WhenPasswordsAreMaching()
         {
             var saltAndHash = _passwordHashService.HashWithSaltPassword(Password);
             var match = _passwordHashService.VerifyPassword(Password, saltAndHash);
@@ -34,7 +33,7 @@ namespace TitanGate.Website.Api.UnitTests
         }
 
         [Fact]
-        public async Task VerifyPassword_ShouldReturnFalse_WhenPasswordsAreNotMaching()
+        public void VerifyPassword_ShouldReturnFalse_WhenPasswordsAreNotMaching()
         {
             var saltAndHash = _passwordHashService.HashWithSaltPassword(Password);
             var match = _passwordHashService.VerifyPassword("NotTheSamePassword", saltAndHash);
