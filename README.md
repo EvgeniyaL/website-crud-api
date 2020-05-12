@@ -10,7 +10,7 @@
     * xunit
     * Moq
 
-## Used design patterns##
+## Used design patterns ##
 
     * Repository pattern
     * Factory / Dependency injection
